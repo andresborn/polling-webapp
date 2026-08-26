@@ -2,30 +2,39 @@ services:
   # Polling web app
   next_webapp:
     build:
-      context: ./webapp
+      context: .
     container_name: next_webapp
     ports:
       - 3000:3000
+    networks:
+      - app-network
     depends_on:
       db:
         condition: service_healthy
 
   # Postgres Database
   db:
-    image: postgres
+    image: postgres:18
     restart: always
-    user: postgres
+    user: ${POSTGRES_USER}
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/docker
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    expose:
-      - 5432
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    ports:
+      - 5432:5432
     healthcheck:
       test: ["CMD", "pg_isready"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 volumes:
   db-data:
+
+networks:
+  app-network:
+    driver: bridge
