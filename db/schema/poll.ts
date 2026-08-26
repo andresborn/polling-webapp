@@ -1,10 +1,10 @@
 import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { timestamps } from "../columns.helpers";
-import { users } from "./user";
+import { user } from "./auth";
 
-export const polls = pgTable("polls", {
+export const poll = pgTable("poll", {
   id: uuid("id").primaryKey().defaultRandom(),
   label: text("label").notNull(),
-  userId: uuid("user_id").references(() => users.id).notNull(),
+  userId: text("user_id").references(() => user.id).notNull(),
   ...timestamps,
 });
