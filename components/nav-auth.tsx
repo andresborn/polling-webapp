@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/dist/client/link";
+
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,6 @@ export const NavAuth = () => {
 
   return (
     <>
-      <Link href="/">Poll it!</Link>
       <Button onClick={handleButton}>{data ? "Sign Out" : "Sign In"}</Button>
     </>
   );

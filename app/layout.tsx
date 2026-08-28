@@ -3,6 +3,7 @@ import "./globals.css";
 import { Roboto, Roboto_Slab } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { NavAuth } from "@/components/nav-auth";
+import Link from "next/link";
 
 const robotoSlabHeading = Roboto_Slab({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <nav className="bg-black text-white flex justify-between px-6 py-4 font-heading min-h-14">
+          <Link href="/">Poll it!</Link>
           <NavAuth />
         </nav>
 
