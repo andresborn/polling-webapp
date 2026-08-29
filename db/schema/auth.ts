@@ -1,4 +1,3 @@
-import { defineRelations } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -86,22 +85,3 @@ export const verification = pgTable(
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
-
-// export const userRelations = defineRelations(user, ({ many }) => ({
-//   sessions: many(session),
-//   accounts: many(account),
-// }));
-
-// export const sessionRelations = defineRelations(session, ({ one }) => ({
-//   user: one(user, {
-//     fields: [session.userId],
-//     references: [user.id],
-//   }),
-// }));
-
-// export const accountRelations = defineRelations(account, ({ one }) => ({
-//   user: one(user, {
-//     fields: [account.userId],
-//     references: [user.id],
-//   }),
-// }));
