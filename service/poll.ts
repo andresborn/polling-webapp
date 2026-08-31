@@ -4,6 +4,20 @@ import { pollInsertSchema, pollSelectSchema } from "@/db/schema/poll";
 import { eq } from "drizzle-orm";
 import z from "zod";
 
+export const getUserPollWithOptions = async (
+  userId: string,
+  pollId: string,
+) => {
+  const result = await db.query.poll.findFirst({
+    where: { id: pollId, userId },
+    with: {
+      options: true,
+    },
+  });
+
+  return result;
+};
+
 export const getUserPolls = async (selectData: { userId: string }) => {
   const parsed = z.object({ userId: z.string() }).safeParse(selectData);
 

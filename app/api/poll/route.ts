@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth } from "@/lib/with-session";
-import { createPoll, deleteUserPoll, getUserPolls } from "@/service/poll";
+import {
+  createPoll,
+  deleteUserPoll,
+  getUserPolls,
+  getUserPollWithOptions,
+} from "@/service/poll";
 
 export const GET = withAuth(async (request, context) => {
   const userId = context.user.id;
+  const { searchParams } = new URL(request.url);
+  const pollId = searchParams.get("id");
+  if (pollId) {
+    const result = await getUserPollWithOptions(userId, pollId);
+    return NextResponse.json({ result });
+  }
 
   const { success, error, result } = await getUserPolls({ userId });
 

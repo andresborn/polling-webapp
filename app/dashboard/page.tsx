@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { pollSelectSchema } from "@/db/schema/poll";
 import { Poll } from "@/db/types";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import z from "zod";
 
@@ -22,6 +23,8 @@ export default function Home() {
 
   const [polls, setPolls] = useState<Poll[]>([]);
   const [refetch, setRefetch] = useState(false);
+
+  const router = useRouter();
 
   const createPoll = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,6 +42,10 @@ export default function Home() {
       body: JSON.stringify({ pollId }),
     });
     setRefetch(() => !refetch);
+  };
+
+  const navigateToPoll = async (pollId: string) => {
+    router.push(`/poll/${pollId}`);
   };
 
   useEffect(() => {
@@ -60,7 +67,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center">
       <main className="w-full py-32 px-[10%] gap-4 flex flex-col">
-        <h1>Dashboard</h1>
+        <h1>Your Polls</h1>
 
         <form onSubmit={createPoll}>
           <FieldGroup>
@@ -80,18 +87,25 @@ export default function Home() {
               <TableHead>Id</TableHead>
               <TableHead>Label</TableHead>
               <TableHead>Created at</TableHead>
-              <TableHead className="text-right min-w-12 w-full">
-                Action
-              </TableHead>
+              <TableHead className="text-right min-w-12">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {polls.map((poll) => (
               <TableRow key={poll.label}>
-                <TableCell className="truncate max-w-38">{poll.id}</TableCell>
+                <TableCell className="truncate max-w-38">
+                  {poll.id.substring(0, 4)}
+                </TableCell>
                 <TableCell>{poll.label}</TableCell>
                 <TableCell>{poll.created_at.toDateString()}</TableCell>
                 <TableCell className="text-right">
+                  <Button
+                    onClick={() => navigateToPoll(poll.id)}
+                    variant="secondary"
+                    size="xs"
+                  >
+                    EDIT
+                  </Button>
                   <Button
                     onClick={() => deletePoll(poll.id)}
                     variant="destructive"
