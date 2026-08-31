@@ -1,14 +1,24 @@
 ## TODO
 
-- Dasboard page: Button that creates polls. List of polls gets refreshed after submission.
+- [ ] Refactor Dashboard and Dashboard/poll/[id] (update paths too) to Server Components for the initial data load (call `service/*.ts` directly instead of client-fetching our own API routes). Keep mutations as client-side fetches for now — not going the Server Actions route.
+
+- [x] Dashboard page: Button that creates polls. List of polls gets refreshed after submission.
   - Components: Button, list.
   - Endpoints: GET polls, POST poll, DELETE poll
 
-- Dashboard/poll/[id]: Fields with options. Add option, text field.
-  - Components: Text field, add button. Refresh after submit?
-  - Endpoints: DELETE poll, GET POST PUT DELETE option
-  
-- View/[id]: Vote and view results in real time
-  - Components: Vote button adds quantity to option. Chart to view live results connected with websocket.
-    - Add vote with option_id as foreign key
-  - Enpoints: GET votes of each option, websocket server, POST vote
+- [x] Dashboard/poll/[id]: Fields with options. Add option, text field.
+  - Components: Text field, add button, table of options.
+  - Endpoints: GET poll (with options), POST option, DELETE option
+  - [ ] PUT option (edit label)
+
+- [ ] View/[id]: Vote and view results in real time
+  - Components: Vote button adds to an option's count. Chart/table of live results connected via websocket.
+  - Data: dedicated `vote` table (option_id, user_id, created_at) instead of a counter column on `option` — one row per vote, aggregated with `COUNT(*) GROUP BY option_id`.
+    - Authenticated voting: one vote per (poll_id, user_id).
+    - Anonymous voting: uuid stored in localStorage, not strictly enforced for now.
+  - Endpoints: GET results for a poll, POST vote.
+  - Realtime: separate Node service (own docker-compose entry), not inside the Next.js process.
+    - `POST vote` writes to the DB first, then notifies the service.
+    — Service keeps counts in memory, reconciles from the DB on startup/periodically so it stays a cache; DB remains SSoT.
+    - Clients connect over websocket and get a snapshot + live `{ optionId, count }` deltas.
+    - Can't live in the same process as Next.js: `output: "standalone"` and a custom server are mutually exclusive (see `node_modules/next/dist/docs/01-app/02-guides/custom-server.md`).
