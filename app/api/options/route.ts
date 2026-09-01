@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { withAuth } from "@/lib/with-session";
+import { withAuth } from "@/lib/with-auth";
 import { createOption, deleteUserOption } from "@/service/options";
 
 export const POST = withAuth(async (request, context) => {
