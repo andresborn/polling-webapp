@@ -15,7 +15,7 @@ export const SignInCard = () => {
   const handleSignIn = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await authClient.signIn.email({ email, password });
-    console.log({ error: res.error });
+
     if (res.error === null) {
       router.push("/dashboard");
     }
