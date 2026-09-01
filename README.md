@@ -1,6 +1,16 @@
-## TODO
+## Paths
+
+- /dashboard (private): View the polls you own.
+- /dashboard/poll/[id] (private): Edit poll; add/delete options, publish poll, delete, edit name.
+- /poll/[id] (public): View a published poll with real-time data of voting, vote.
+
+## TODOs
 
 - [ ] Refactor Dashboard and Dashboard/poll/[id] (update paths too) to Server Components for the initial data load (call `service/*.ts` directly instead of client-fetching our own API routes). Keep mutations as client-side fetches for now — not going the Server Actions route.
+
+- [ ] Create main page.
+
+- [ ] Add authentication to pages.
 
 - [x] Dashboard page: Button that creates polls. List of polls gets refreshed after submission.
   - Components: Button, list.
@@ -11,12 +21,13 @@
   - Endpoints: GET poll (with options), POST option, DELETE option
   - [ ] PUT option (edit label)
 
-- [ ] View/[id]: Vote and view results in real time
-  - Components: Vote button adds to an option's count. Chart/table of live results connected via websocket.
-  - Data: dedicated `vote` table (option_id, user_id, created_at) instead of a counter column on `option` — one row per vote, aggregated with `COUNT(*) GROUP BY option_id`.
+- [ ] poll/[id]: Vote and view results in real time
+  - Add "published" (bool), "authenticated_voting" (bool) and "expires_at" (timestamp) to poll table.
+  - Data: dedicated `vote` table (poll_id, option_id, user_id?, created_at).
     - Authenticated voting: one vote per (poll_id, user_id).
-    - Anonymous voting: uuid stored in localStorage, not strictly enforced for now.
+    - Anonymous voting: uuid stored in localStorage.
   - Endpoints: GET results for a poll, POST vote.
+  - Components: Vote button adds to an option's count. Chart/table of live results connected via websocket.
   - Realtime: separate Node service (own docker-compose entry), not inside the Next.js process.
     - `POST vote` writes to the DB first, then notifies the service.
     — Service keeps counts in memory, reconciles from the DB on startup/periodically so it stays a cache; DB remains SSoT.
