@@ -33,7 +33,7 @@ export default function Home() {
       method: "POST",
       body: JSON.stringify({ label }),
     });
-    setRefetch(() => !refetch);
+    setRefetch((prev) => !prev);
   };
 
   const deletePoll = async (pollId: string) => {
@@ -41,7 +41,7 @@ export default function Home() {
       method: "DELETE",
       body: JSON.stringify({ pollId }),
     });
-    setRefetch(() => !refetch);
+    setRefetch((prev) => !prev);
   };
 
   const navigateToPoll = async (pollId: string) => {
