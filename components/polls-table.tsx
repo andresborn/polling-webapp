@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 
 import { Poll } from "@/db/types";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -44,7 +45,7 @@ export default function PollsTable(props: Props) {
   };
 
   const navigateToPoll = async (pollId: string) => {
-    router.push(`/poll/${pollId}`);
+    router.push(`/dashboard/poll/${pollId}`);
   };
 
   return (
@@ -69,6 +70,7 @@ export default function PollsTable(props: Props) {
             <TableHead>Id</TableHead>
             <TableHead>Label</TableHead>
             <TableHead>Created at</TableHead>
+            <TableHead>Live link</TableHead>
             <TableHead className="text-right min-w-12">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -80,6 +82,17 @@ export default function PollsTable(props: Props) {
               </TableCell>
               <TableCell>{poll.label}</TableCell>
               <TableCell>{poll.created_at.toDateString()}</TableCell>
+              <TableCell>
+                {
+                  <Link
+                    href={`/poll/${poll.id}`}
+                    className="hover:underline hover:text-primary-foreground"
+                    target="_blank"
+                  >
+                    Live poll &#8599;
+                  </Link>
+                }
+              </TableCell>
               <TableCell className="text-right">
                 <Button
                   onClick={() => navigateToPoll(poll.id)}

@@ -6,11 +6,13 @@
 
 ## TODOs
 
-- [ ] Refactor Dashboard and Dashboard/poll/[id] (update paths too) to Server Components for the initial data load (call `service/*.ts` directly instead of client-fetching our own API routes). Keep mutations as client-side fetches for now — not going the Server Actions route.
+- [x] Refactor /dashboard and /dashboard/poll/[id] to Server Components for the initial data load (call `service/*.ts` directly instead of client-fetching our own API routes). Keep mutations as client-side fetches for now — not going the Server Actions route.
 
 - [ ] Create main page.
 
-- [ ] Add authentication to pages.
+- Add authentication to pages.
+  - [x] /dashboard
+  - [x] /dashboard/poll/[id]
 
 - [x] Dashboard page: Button that creates polls. List of polls gets refreshed after submission.
   - Components: Button, list.

@@ -36,6 +36,15 @@ export const getUserPolls = async (selectData: { userId: string }) => {
   }
 };
 
+export const getPoll = async (pollId: string) => {
+  return await db.query.poll.findFirst({
+    where: { id: pollId },
+    with: {
+      options: true, // votes: true
+    },
+  });
+};
+
 export const createPoll = async (
   insertData: { userId: string; label: string },
 ) => {
