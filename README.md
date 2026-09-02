@@ -29,6 +29,7 @@
     - Authenticated voting: one vote per (poll_id, user_id).
     - Anonymous voting: uuid stored in localStorage.
   - Endpoints: GET results for a poll, POST vote.
+    - [ ] `insertAuthenticatedVote`/`insertAnonVote` return `success: true` even when `onConflictDoNothing` silently skips a duplicate vote (empty `result`). Check `result.length === 0` and return a distinct "already voted" error instead.
   - Components: Vote button adds to an option's count. Chart/table of live results connected via websocket.
   - Realtime: separate Node service (own docker-compose entry), not inside the Next.js process.
     - `POST vote` writes to the DB first, then notifies the service.
