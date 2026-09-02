@@ -19,7 +19,12 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.option.pollId,
 			to: r.poll.id,
 		}),
-		votes: r.many.vote(),
+		votesOptionId: r.many.vote({
+			alias: "vote_optionId_option_id",
+		}),
+		votesPollIdOptionId: r.many.vote({
+			alias: "vote_pollId_optionId_option_pollId_id",
+		}),
 	},
 	poll: {
 		options: r.many.option(),
@@ -36,9 +41,15 @@ export const relations = defineRelations(schema, (r) => ({
 		}),
 	},
 	vote: {
-		option: r.one.option({
+		optionOptionId: r.one.option({
 			from: r.vote.optionId,
 			to: r.option.id,
+			alias: "vote_optionId_option_id",
+		}),
+		optionPollIdOptionId: r.one.option({
+			from: [r.vote.pollId, r.vote.optionId],
+			to: [r.option.pollId, r.option.id],
+			alias: "vote_pollId_optionId_option_pollId_id",
 		}),
 		poll: r.one.poll({
 			from: r.vote.pollId,
