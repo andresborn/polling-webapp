@@ -40,7 +40,8 @@ export const getPoll = async (pollId: string) => {
   return await db.query.poll.findFirst({
     where: { id: pollId },
     with: {
-      options: true, // votes: true
+      options: true,
+      votes: true,
     },
   });
 };

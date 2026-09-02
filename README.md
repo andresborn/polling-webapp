@@ -24,7 +24,7 @@
   - [ ] PUT option (edit label)
 
 - [ ] poll/[id]: Vote and view results in real time
-  - Add "published" (bool), "authenticated_voting" (bool) and "expires_at" (timestamp) to poll table.
+  - [x] Add "published" (bool), "authenticated_voting" (bool) and "expires_at" (timestamp) to poll table.
   - Data: dedicated `vote` table (poll_id, option_id, user_id?, created_at).
     - Authenticated voting: one vote per (poll_id, user_id).
     - Anonymous voting: uuid stored in localStorage.

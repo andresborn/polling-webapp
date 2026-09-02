@@ -1,0 +1,1 @@
+ALTER TABLE "vote" ADD COLUMN "anon_id" text;
