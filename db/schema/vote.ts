@@ -1,4 +1,11 @@
-import { pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
+import {
+  foreignKey,
+  pgTable,
+  text,
+  timestamp,
+  unique,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { user } from "./auth";
 import { poll } from "./poll";
 import { option } from "./option";
@@ -14,6 +21,11 @@ export const vote = pgTable("vote", {
 }, (t) => [
   unique("vote_poll_user_uidx").on(t.pollId, t.userId),
   unique("vote_poll_anon_uidx").on(t.pollId, t.anonId),
+  foreignKey({
+    name: "vote_option_poll_fk",
+    columns: [t.pollId, t.optionId],
+    foreignColumns: [option.pollId, option.id],
+  }),
 ]);
 
 export const voteInsertSchema = createInsertSchema(vote, {});

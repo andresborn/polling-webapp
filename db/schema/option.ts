@@ -1,4 +1,4 @@
-import { integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, unique, uuid } from "drizzle-orm/pg-core";
 import { timestamps } from "../columns.helpers";
 import { poll } from "./poll";
 import {
@@ -13,7 +13,9 @@ export const option = pgTable("option", {
   votes: integer("votes").notNull().default(0),
   pollId: uuid("poll_id").references(() => poll.id).notNull(),
   ...timestamps,
-});
+}, (t) => [
+  unique("option_id_poll_id_uidx").on(t.id, t.pollId),
+]);
 
 export const optionInsertSchema = createInsertSchema(option);
 export const optionSelectSchema = createSelectSchema(option);

@@ -1,0 +1,2 @@
+ALTER TABLE "option" ADD CONSTRAINT "option_id_poll_id_uidx" UNIQUE("id","poll_id");--> statement-breakpoint
+ALTER TABLE "vote" ADD CONSTRAINT "vote_option_poll_fk" FOREIGN KEY ("poll_id","option_id") REFERENCES "option"("poll_id","id");
