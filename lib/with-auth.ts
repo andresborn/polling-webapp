@@ -11,7 +11,7 @@ type AuthenticatedHandler = (
 export const withAuth = (handler: AuthenticatedHandler) => {
   return async (
     request: NextRequest,
-    context: { params: Promise<Record<string, string>>; user: User },
+    context: { params: Promise<Record<string, string>> },
   ) => {
     const res = await auth.api.getSession({
       headers: await headers(),

@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Roboto, Roboto_Slab } from "next/font/google";
+import { Roboto, Roboto_Slab, BBH_Bogle, Geist_Pixel } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { NavAuth } from "@/components/nav-auth";
 import Link from "next/link";
 
-const robotoSlabHeading = Roboto_Slab({
+const bbhBogleHeading = BBH_Bogle({
+  weight: "400",
   subsets: ["latin"],
   variable: "--font-heading",
 });
 
-const roboto = Roboto({ subsets: ["latin"], variable: "--font-sans" });
+const roboto = Geist_Pixel({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: "400",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,12 +30,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         "h-full antialiased",
         "font-sans",
         roboto.variable,
-        robotoSlabHeading.variable,
+        bbhBogleHeading.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
-        <nav className="bg-black text-white flex justify-between px-6 py-4 font-heading min-h-14">
-          <Link href="/">Poll it!</Link>
+      <body className="dark min-h-full flex flex-col bg-image-grid">
+        <nav className="flex justify-between px-18 py-8 border-b border-primary/35">
+          <Link
+            className="font-heading text-2xl font-bold text-foreground"
+            href="/"
+          >
+            Pollit
+          </Link>
           <NavAuth />
         </nav>
 

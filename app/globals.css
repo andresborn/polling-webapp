@@ -114,6 +114,19 @@
     --radius-2xl: calc(var(--radius) * 1.8);
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
+
+    --animate-blink: blink 1.4s infinite;
+    @keyframes blink {
+      0% {
+        opacity: 1
+      }
+      50% {
+        opacity: 0
+      }
+      100% {
+        opacity: 1
+      }
+    }
 }
 
 @layer base {
@@ -127,3 +140,18 @@
     @apply font-sans;
     }
 }
+
+.bg-image-grid {
+  background-color: var(--background);
+	background-position: 0% 0%;
+	background-repeat: repeat;
+	background-attachment: scroll;
+	background-image: linear-gradient(oklch(1 0 0 / 0.03) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 0.03) 1px, transparent 1px);
+	background-size: 40px 40px;
+	background-origin: padding-box;
+	background-clip: border-box;
+	color: var(--foreground);
+	min-height: 100%;
+
+}
+

@@ -26,7 +26,14 @@ export const NavAuth = () => {
 
   return (
     <>
-      <Button onClick={handleButton}>{data ? "Sign Out" : "Sign In"}</Button>
+      <Button
+        className="font-heading"
+        variant="default"
+        size="lg"
+        onClick={handleButton}
+      >
+        {data ? "Sign Out" : "Sign In"}
+      </Button>
     </>
   );
 };
