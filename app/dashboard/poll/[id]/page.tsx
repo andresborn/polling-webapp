@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getUserPollWithOptions } from "@/service/poll";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import Link from "next/link";
 
 export default async function EditPoll({
   params,
@@ -18,7 +19,18 @@ export default async function EditPoll({
 
   return (
     <div className="flex flex-col items-center">
-      <main className="w-full py-32 px-[10%] gap-4 flex flex-col">
+      <main className="w-full py-8 px-[10%] gap-4 flex flex-col">
+        <div className="flex justify-between pb-12">
+          <Link className="self-start hover:underline" href="/dashboard">
+            &larr; Back to Polls
+          </Link>
+          <Link
+            href={`/poll/${id}`}
+            className="self-start hover:underline text-primary"
+          >
+            Live link &#8599;
+          </Link>
+        </div>
         <PollConfig poll={poll} />
       </main>
     </div>

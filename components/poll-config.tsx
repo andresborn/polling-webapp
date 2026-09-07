@@ -97,19 +97,16 @@ export default function PollConfig(props: Props) {
 
   return (
     <>
-      <Link className="hover:underline" href="/dashboard">
-        &larr; Back to Polls
-      </Link>
       {poll && (
         <>
-          <div className="flex justify-between">
-            <h1>{poll.label}</h1>
+          <div className="flex justify-between pb-4">
+            <h1 className="font-heading text-2xl">{poll.label}</h1>
 
             <Dialog>
               <DialogTrigger
                 render={
                   <Button size="lg" variant="destructive">
-                    DELETE
+                    DELETE POLL
                   </Button>
                 }
               />

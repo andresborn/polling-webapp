@@ -12,7 +12,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col items-center">
-      <main className="w-full py-32 px-[10%] gap-4 flex flex-col">
+      <main className="w-full py-8 px-[10%] gap-4 flex flex-col">
         <PollsTable initialPolls={initialPolls.result ?? []} />
       </main>
     </div>

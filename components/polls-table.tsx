@@ -64,9 +64,9 @@ export default function PollsTable(props: Props) {
             type="text"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            placeholder="Question to ask"
+            placeholder="Mirror mirror on the wall, who is the prettiest of them all?"
           />
-          <Button type="submit">Create a new poll</Button>
+          <Button type="submit">Create</Button>
         </FieldGroup>
       </form>
 
