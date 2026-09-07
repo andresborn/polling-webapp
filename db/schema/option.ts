@@ -6,6 +6,7 @@ import {
   createSelectSchema,
   createUpdateSchema,
 } from "drizzle-orm/zod";
+import z from "zod";
 
 export const option = pgTable("option", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -18,5 +19,7 @@ export const option = pgTable("option", {
 ]);
 
 export const optionInsertSchema = createInsertSchema(option);
-export const optionSelectSchema = createSelectSchema(option);
+export const optionSelectSchema = createSelectSchema(option, {
+  created_at: z.coerce.date(),
+});
 export const optionUpdateSchema = createUpdateSchema(option);

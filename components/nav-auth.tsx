@@ -1,15 +1,13 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
 export const NavAuth = () => {
   const { useSession, signOut } = authClient;
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const { data, error, isPending } = useSession();
+  const { data, isPending } = useSession();
   const router = useRouter();
 
   const handleButton = async () => {
@@ -22,10 +20,22 @@ export const NavAuth = () => {
     }
   };
 
+  const navigateToDashboard = () => router.push("/dashboard");
+
   if (isPending) return null;
 
   return (
-    <>
+    <div className="flex gap-4">
+      {data && (
+        <Button
+          className="font-heading"
+          variant="secondary"
+          size="lg"
+          onClick={navigateToDashboard}
+        >
+          Your polls
+        </Button>
+      )}
       <Button
         className="font-heading"
         variant="default"
@@ -34,6 +44,6 @@ export const NavAuth = () => {
       >
         {data ? "Sign Out" : "Sign In"}
       </Button>
-    </>
+    </div>
   );
 };

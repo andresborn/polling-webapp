@@ -10,11 +10,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { pollSelectSchema } from "@/db/schema/poll";
 
 import { Poll } from "@/db/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import z from "zod";
 
 interface Props {
   initialPolls: Poll[];
@@ -31,17 +33,21 @@ export default function PollsTable(props: Props) {
   const createPoll = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await fetch("/api/poll", {
+    const res = await fetch("/api/poll", {
       method: "POST",
       body: JSON.stringify({ label }),
     });
-  };
 
-  const deletePoll = async (pollId: string) => {
-    await fetch("/api/poll", {
-      method: "DELETE",
-      body: JSON.stringify({ pollId }),
-    });
+    if (!res.ok) return;
+    const body = await res.json();
+    const parsed = z.array(pollSelectSchema).safeParse(body.result);
+    if (parsed.data) {
+      setPolls((prev) => {
+        const x = [...prev, ...parsed.data];
+        return x;
+      });
+      setLabel("");
+    }
   };
 
   const navigateToPoll = async (pollId: string) => {
@@ -77,8 +83,8 @@ export default function PollsTable(props: Props) {
         <TableBody>
           {polls.map((poll) => (
             <TableRow key={poll.label}>
-              <TableCell className="truncate max-w-38">
-                {poll.id.substring(0, 4)}
+              <TableCell className="truncate max-w-24">
+                {poll.id.substring(0, 3)}
               </TableCell>
               <TableCell>{poll.label}</TableCell>
               <TableCell>{poll.created_at.toDateString()}</TableCell>
@@ -100,13 +106,6 @@ export default function PollsTable(props: Props) {
                   size="xs"
                 >
                   EDIT
-                </Button>
-                <Button
-                  onClick={() => deletePoll(poll.id)}
-                  variant="destructive"
-                  size="xs"
-                >
-                  DELETE
                 </Button>
               </TableCell>
             </TableRow>

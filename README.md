@@ -8,7 +8,7 @@
 
 - [x] Refactor /dashboard and /dashboard/poll/[id] to Server Components for the initial data load (call `service/*.ts` directly instead of client-fetching our own API routes). Keep mutations as client-side fetches for now — not going the Server Actions route.
 
-- [ ] Create main page.
+- [x] Create main page.
 
 - Add authentication to pages.
   - [x] /dashboard
@@ -36,3 +36,7 @@
     — Service keeps counts in memory, reconciles from the DB on startup/periodically so it stays a cache; DB remains SSoT.
     - Clients connect over websocket and get a snapshot + live `{ optionId, count }` deltas.
     - Can't live in the same process as Next.js: `output: "standalone"` and a custom server are mutually exclusive (see `node_modules/next/dist/docs/01-app/02-guides/custom-server.md`).
+
+- [ ] Delete options when deleting poll. Delete votes before deleting options. Move delete option to poll page. Show warning and 
+    confirmation.
+- [ ] Unpublished polls visible to owner, redirect for rest.

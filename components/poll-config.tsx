@@ -11,10 +11,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { optionSelectSchema } from "@/db/schema/option";
 import { Poll, Option } from "@/db/types";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import z from "zod";
 
 interface PollWithOptions extends Poll {
   options: Option[];
@@ -28,22 +40,59 @@ export default function PollConfig(props: Props) {
   const { id } = useParams();
   const [poll, setPoll] = useState<PollWithOptions | undefined>(props.poll);
   const [option, setOption] = useState("");
+  const router = useRouter();
+
+  const deletePoll = async (pollId: string) => {
+    const res = await fetch("/api/poll", {
+      method: "DELETE",
+      body: JSON.stringify({ pollId }),
+    });
+    if (!res.ok) return;
+    router.push("/dashboard");
+  };
 
   const addOption = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await fetch("/api/options", {
+    const res = await fetch("/api/options", {
       method: "POST",
       body: JSON.stringify({ pollId: id, label: option }),
     });
-    setOption("");
+    if (!res.ok) return;
+    const body = await res.json();
+    const parsed = z.array(optionSelectSchema).safeParse(body.result);
+
+    if (parsed.data) {
+      setPoll((prev) => {
+        if (!prev) return;
+        const updatedOptions = [...prev.options, ...parsed.data];
+        return { ...prev, options: updatedOptions };
+      });
+      setOption("");
+    }
   };
 
   const deleteOption = async (optionId: string) => {
-    await fetch("/api/options", {
+    const res = await fetch("/api/options", {
       method: "DELETE",
       body: JSON.stringify({ optionId }),
     });
+
+    if (!res.ok) return;
+
+    const body = await res.json();
+    const parsed = z.array(optionSelectSchema).safeParse(body.result);
+
+    if (parsed.data) {
+      setPoll((prev) => {
+        if (!prev) return;
+        const deletedIds = parsed.data.map((p) => p.id);
+        const updatedOptions = prev.options.filter(
+          (o) => !deletedIds.includes(o.id),
+        );
+        return { ...prev, options: updatedOptions };
+      });
+    }
   };
 
   return (
@@ -53,7 +102,48 @@ export default function PollConfig(props: Props) {
       </Link>
       {poll && (
         <>
-          <h1>{poll.label}</h1>
+          <div className="flex justify-between">
+            <h1>{poll.label}</h1>
+
+            <Dialog>
+              <DialogTrigger
+                render={
+                  <Button size="lg" variant="destructive">
+                    DELETE
+                  </Button>
+                }
+              />
+
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="text-2xl">
+                    Are you absolutely sure you want to delete this poll?
+                  </DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    this poll and remove all corresponding options and voting
+                    data.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex gap-4">
+                  <DialogClose
+                    render={
+                      <Button variant="secondary" size="lg">
+                        Cancel
+                      </Button>
+                    }
+                  />
+                  <Button
+                    onClick={() => deletePoll(poll.id)}
+                    variant="destructive"
+                    size="lg"
+                  >
+                    DELETE
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
 
           <form onSubmit={addOption}>
             <FieldGroup className="flex-row items-center gap-2">
