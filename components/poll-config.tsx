@@ -23,10 +23,20 @@ import {
 
 import { optionSelectSchema } from "@/db/schema/option";
 import { Poll, Option } from "@/db/types";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import z from "zod";
+import { Badge } from "./ui/badge";
+import { CircleCheck, CircleX } from "lucide-react";
+import { pollSelectSchema } from "@/db/schema/poll";
+
+interface UpdateSchema {
+  id: string;
+  label?: string;
+  published?: string;
+  authenticatedVoting?: string;
+  expires_at?: string;
+}
 
 interface PollWithOptions extends Poll {
   options: Option[];
@@ -95,51 +105,100 @@ export default function PollConfig(props: Props) {
     }
   };
 
+  const updatePublishStatus = async (publish: boolean) => {
+    const res = await fetch("/api/poll", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: id,
+        published: publish,
+      }),
+    });
+    if (!res.ok) {
+      console.error(await res.json());
+      return;
+    }
+    const { result } = await res.json();
+    const parsed = z.array(pollSelectSchema).parse(result);
+    if (parsed.length > 1) {
+      console.error("More that one poll.");
+      return;
+    }
+    setPoll((prev) => {
+      if (prev) return { ...prev, published: parsed[0].published };
+    });
+  };
+
   return (
     <>
       {poll && (
         <>
           <div className="flex justify-between pb-4">
             <h1 className="font-heading text-2xl">{poll.label}</h1>
+            <div className="flex gap-4 items-center">
+              <Badge
+                variant="outline"
+                className="h-6 font-bold"
+                data-icon="inline-start"
+              >
+                {poll.published ? (
+                  <>
+                    <CircleCheck className="stroke-success" size={12} />
+                    Published
+                  </>
+                ) : (
+                  <>
+                    <CircleX className="stroke-destructive" size={12} />
+                    Unpublished
+                  </>
+                )}
+              </Badge>
+              <Button
+                size="lg"
+                variant="default"
+                className="font-bold right"
+                onClick={() => updatePublishStatus(!poll.published)}
+              >
+                {!poll.published ? "PUBLISH POLL" : "UNPUBLISH POLL"}
+              </Button>
+              <Dialog>
+                <DialogTrigger
+                  render={
+                    <Button size="lg" variant="destructive">
+                      DELETE POLL
+                    </Button>
+                  }
+                />
 
-            <Dialog>
-              <DialogTrigger
-                render={
-                  <Button size="lg" variant="destructive">
-                    DELETE POLL
-                  </Button>
-                }
-              />
-
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="text-2xl">
-                    Are you absolutely sure you want to delete this poll?
-                  </DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    this poll and remove all corresponding options and voting
-                    data.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="flex gap-4">
-                  <DialogClose
-                    render={
-                      <Button variant="secondary" size="lg">
-                        Cancel
-                      </Button>
-                    }
-                  />
-                  <Button
-                    onClick={() => deletePoll(poll.id)}
-                    variant="destructive"
-                    size="lg"
-                  >
-                    DELETE
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl">
+                      Are you absolutely sure you want to delete this poll?
+                    </DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      this poll and remove all corresponding options and voting
+                      data.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex gap-4">
+                    <DialogClose
+                      render={
+                        <Button variant="secondary" size="lg">
+                          Cancel
+                        </Button>
+                      }
+                    />
+                    <Button
+                      onClick={() => deletePoll(poll.id)}
+                      variant="destructive"
+                      size="lg"
+                    >
+                      DELETE
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
 
           <form onSubmit={addOption}>

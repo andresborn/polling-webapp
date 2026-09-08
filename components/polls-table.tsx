@@ -11,11 +11,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { pollSelectSchema } from "@/db/schema/poll";
-
+import { SquareArrowOutUpRight } from "lucide-react";
 import { Poll } from "@/db/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import z from "zod";
 
 interface Props {
@@ -92,10 +92,10 @@ export default function PollsTable(props: Props) {
                 {
                   <Link
                     href={`/poll/${poll.id}`}
-                    className="hover:underline hover:text-primary-foreground"
+                    className="hover:underline hover:text-primary-foreground flex items-center gap-1"
                     target="_blank"
                   >
-                    Live poll &#8599;
+                    Live poll <SquareArrowOutUpRight size={12} />
                   </Link>
                 }
               </TableCell>

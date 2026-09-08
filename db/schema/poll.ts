@@ -21,5 +21,6 @@ export const poll = pgTable("poll", {
 export const pollInsertSchema = createInsertSchema(poll, {});
 export const pollSelectSchema = createSelectSchema(poll, {
   created_at: z.coerce.date(),
+  updated_at: z.coerce.date(),
 });
 export const pollUpdateSchema = createUpdateSchema(poll, {});

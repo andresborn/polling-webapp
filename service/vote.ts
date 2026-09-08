@@ -7,8 +7,8 @@ export const createVote = async (
   insertData: {
     pollId: string;
     optionId: string;
-    anonId: string;
-    userId: string;
+    anonId?: string | null;
+    userId?: string | null;
   },
 ) => {
   const { pollId, optionId, anonId, userId } = insertData;
@@ -53,9 +53,13 @@ export const createVote = async (
   }
 
   if (poll.authenticatedVoting) {
-    return await insertAuthenticatedVote({ pollId, optionId, userId });
+    return await insertAuthenticatedVote({
+      pollId,
+      optionId,
+      userId: userId ?? "",
+    });
   } else {
-    return await insertAnonVote({ pollId, optionId, anonId });
+    return await insertAnonVote({ pollId, optionId, anonId: anonId ?? "" });
   }
 };
 

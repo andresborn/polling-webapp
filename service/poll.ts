@@ -1,6 +1,10 @@
 import { db } from "@/db/drizzle";
 import { poll } from "@/db/schema";
-import { pollInsertSchema, pollSelectSchema } from "@/db/schema/poll";
+import {
+  pollInsertSchema,
+  pollSelectSchema,
+  pollUpdateSchema,
+} from "@/db/schema/poll";
 import { eq } from "drizzle-orm";
 import z from "zod";
 
@@ -70,14 +74,63 @@ export const createPoll = async (
   }
 };
 
-export const updatePoll = async (id: string, label: string) => {
-  try {
-    const result = await db.update(poll).set({ label }).where(eq(poll.id, id))
-      .returning();
-    return { success: true, result };
-  } catch (e) {
-    console.error(e);
-    return { success: false, result: null };
+export const updatePoll = async (
+  updateData: {
+    id: string;
+    label?: string;
+    published?: string;
+    authenticatedVoting?: string;
+    expires_at?: string;
+  },
+  userId: string,
+) => {
+  if (!await isPollOwnedByUser(updateData.id, userId)) {
+    return {
+      success: false,
+      result: null,
+      error: new Error("Update poll: poll not owned by this user."),
+    };
+  }
+
+  const parsed = pollUpdateSchema.safeParse(updateData);
+
+  if (!parsed.success) {
+    return { success: false, result: null, error: parsed.error };
+  }
+
+  if (parsed.data) {
+    const { id, authenticatedVoting, expires_at, label, published } =
+      parsed.data;
+    const updated_at = new Date(Date.now());
+
+    if (!id) {
+      return {
+        success: false,
+        result: null,
+        error: new Error("Update poll: missing poll id."),
+      };
+    }
+
+    try {
+      const result = await db.update(poll).set({
+        authenticatedVoting,
+        expires_at,
+        label,
+        published,
+        updated_at,
+      }).where(eq(poll.id, id))
+        .returning();
+      return { success: true, result, error: null };
+    } catch (e) {
+      console.error(e);
+      return { success: false, result: null, error: e };
+    }
+  } else {
+    return {
+      success: false,
+      result: null,
+      error: new Error("Update poll failed."),
+    };
   }
 };
 
@@ -97,4 +150,9 @@ export const deletePoll = async (id: string) => {
     console.error(e);
     return { success: false, result: null, error: e };
   }
+};
+
+const isPollOwnedByUser = async (pollId: string, userId: string) => {
+  const result = await db.query.poll.findFirst({ where: { id: pollId } });
+  return result && result.userId === userId;
 };

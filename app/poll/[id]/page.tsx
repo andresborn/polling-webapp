@@ -13,11 +13,34 @@ export default async function Poll({
 
   if (!result) redirect("/");
 
+  // const chartData = [
+  //   { option: "A New Hope", votes: 56 },
+  //   { option: "The Empire Strikes Back", votes: 45 },
+  //   { option: "Return of the Jedi", votes: 60 },
+  //   { option: "The Phantom Menace", votes: 32 },
+  //   { option: "Attack of the Clones", votes: 40 },
+  //   { option: "Revenge of the Sith", votes: 21 },
+  // ];
+
+  const poll = await getPoll(id);
+
+  if (!poll) redirect("/");
+
+  const options = poll.options.map((o) => {
+    return { id: o.id, label: o.label };
+  });
+
+  const cd: { [key: string]: number } = {};
+
+  for (const vote of poll.votes) {
+    cd[vote.optionId] += 1;
+  }
+
+  const chartData = Object.entries(cd).map(([k, v]) => {
+    return { option: k, votes: v };
+  });
+
   return (
-    <div className="flex flex-col items-center">
-      <main className="w-full py-32 px-[10%] gap-4 flex flex-col">
-        <ChartExample />
-      </main>
-    </div>
+    <ChartExample chartData={chartData} options={options} pollId={poll.id} />
   );
 }

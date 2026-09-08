@@ -5,6 +5,7 @@ import {
   deleteUserPoll,
   getUserPolls,
   getUserPollWithOptions,
+  updatePoll,
 } from "@/service/poll";
 
 export const GET = withAuth(async (request, context) => {
@@ -38,6 +39,28 @@ export const POST = withAuth(async (request, context) => {
     return NextResponse.json({
       message: "Can't create poll.",
       error: JSON.stringify(error),
+    }, { status: 400 });
+  }
+
+  return NextResponse.json({ message: "Poll created.", result }, {
+    status: 201,
+  });
+});
+
+export const PUT = withAuth(async (request, context) => {
+  const data = await request.json();
+
+  const userId = context.user.id;
+  const { result, success, error } = await updatePoll(data, userId);
+
+  if (!success) {
+    return NextResponse.json({
+      message: "Can't create poll.",
+      error: JSON.stringify(
+        error instanceof Error
+          ? { name: error.name, message: error.message }
+          : {},
+      ),
     }, { status: 400 });
   }
 
