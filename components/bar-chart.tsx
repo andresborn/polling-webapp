@@ -25,8 +25,9 @@ interface VoteOption {
 }
 
 interface ChartData {
-  option: string;
+  optionId: string;
   votes: number;
+  optionLabel: string;
 }
 
 interface Props {
@@ -41,6 +42,8 @@ interface VoteState {
 }
 
 export function ChartExample(props: Props) {
+  console.log(props.chartData);
+
   const submitVote = async (optionId: string) => {
     const item = localStorage.getItem(props.pollId);
     const vs = item ? (JSON.parse(item) as VoteState) : null;
@@ -66,6 +69,7 @@ export function ChartExample(props: Props) {
       localStorage.setItem(props.pollId, JSON.stringify(item));
     }
   }, []);
+
   return (
     <main className="flex flex-col md:flex-row md:gap-4 gap-8 w-full px-18 pt-12">
       <Card className="max-w-3xl md:w-2/3 w-full">
@@ -82,7 +86,7 @@ export function ChartExample(props: Props) {
             >
               <XAxis type="number" dataKey="votes" hide />
               <YAxis
-                dataKey="option"
+                dataKey="optionLabel"
                 type="category"
                 tickLine={false}
                 tickMargin={10}
@@ -98,7 +102,7 @@ export function ChartExample(props: Props) {
 
               <Bar dataKey="votes" fill="var(--color-chart-2)" radius={4}>
                 <LabelList
-                  dataKey="option"
+                  dataKey="optionLabel"
                   position="insideLeft"
                   offset={8}
                   className="fill-foreground"

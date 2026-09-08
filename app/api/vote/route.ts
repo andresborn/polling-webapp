@@ -23,7 +23,9 @@ export const POST = async (request: NextRequest) => {
     } else {
       return NextResponse.json({
         message: "Unable to create vote.",
-        error: error,
+        error: error instanceof Error
+          ? { name: error.name, message: error.message }
+          : {},
       }, {
         status: 400,
       });

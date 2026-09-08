@@ -27,6 +27,7 @@ export default async function EditPoll({
           <Link
             href={`/poll/${id}`}
             className="self-start hover:underline text-primary"
+            target="_blank"
           >
             Live link &#8599;
           </Link>
