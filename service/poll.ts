@@ -41,13 +41,18 @@ export const getUserPolls = async (selectData: { userId: string }) => {
 };
 
 export const getPoll = async (pollId: string) => {
-  return await db.query.poll.findFirst({
-    where: { id: pollId },
-    with: {
-      options: true,
-      votes: true,
-    },
-  });
+  try {
+    return await db.query.poll.findFirst({
+      where: { id: pollId },
+      with: {
+        options: true,
+        votes: true,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 };
 
 export const createPoll = async (
