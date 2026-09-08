@@ -27,8 +27,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import z from "zod";
 import { Badge } from "./ui/badge";
-import { CircleCheck, CircleX } from "lucide-react";
+import {
+  CircleCheck,
+  CircleX,
+  FingerprintPattern,
+  HatGlasses,
+} from "lucide-react";
 import { pollSelectSchema } from "@/db/schema/poll";
+import { PollConfigDialog } from "./poll-config-dialog";
 
 interface UpdateSchema {
   id: string;
@@ -38,7 +44,7 @@ interface UpdateSchema {
   expires_at?: string;
 }
 
-interface PollWithOptions extends Poll {
+export interface PollWithOptions extends Poll {
   options: Option[];
 }
 
@@ -140,6 +146,23 @@ export default function PollConfig(props: Props) {
                 className="h-6 font-bold"
                 data-icon="inline-start"
               >
+                {poll.authenticatedVoting ? (
+                  <>
+                    <FingerprintPattern className="stroke-primary" size={12} />
+                    Authenticated Voting
+                  </>
+                ) : (
+                  <>
+                    <HatGlasses className="stroke-muted-foreground" size={12} />
+                    Anonymous Voting
+                  </>
+                )}
+              </Badge>
+              <Badge
+                variant="outline"
+                className="h-6 font-bold"
+                data-icon="inline-start"
+              >
                 {poll.published ? (
                   <>
                     <CircleCheck className="stroke-success" size={12} />
@@ -152,52 +175,8 @@ export default function PollConfig(props: Props) {
                   </>
                 )}
               </Badge>
-              <Button
-                size="lg"
-                variant="default"
-                className="font-bold right"
-                onClick={() => updatePublishStatus(!poll.published)}
-              >
-                {!poll.published ? "PUBLISH POLL" : "UNPUBLISH POLL"}
-              </Button>
-              <Dialog>
-                <DialogTrigger
-                  render={
-                    <Button size="lg" variant="destructive">
-                      DELETE POLL
-                    </Button>
-                  }
-                />
 
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl">
-                      Are you absolutely sure you want to delete this poll?
-                    </DialogTitle>
-                    <DialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      this poll and remove all corresponding options and voting
-                      data.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="flex gap-4">
-                    <DialogClose
-                      render={
-                        <Button variant="secondary" size="lg">
-                          Cancel
-                        </Button>
-                      }
-                    />
-                    <Button
-                      onClick={() => deletePoll(poll.id)}
-                      variant="destructive"
-                      size="lg"
-                    >
-                      DELETE
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <PollConfigDialog poll={poll} setPoll={setPoll} />
             </div>
           </div>
 
