@@ -58,15 +58,6 @@ export default function PollConfig(props: Props) {
   const [option, setOption] = useState("");
   const router = useRouter();
 
-  const deletePoll = async (pollId: string) => {
-    const res = await fetch("/api/poll", {
-      method: "DELETE",
-      body: JSON.stringify({ pollId }),
-    });
-    if (!res.ok) return;
-    router.push("/dashboard");
-  };
-
   const addOption = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -109,29 +100,6 @@ export default function PollConfig(props: Props) {
         return { ...prev, options: updatedOptions };
       });
     }
-  };
-
-  const updatePublishStatus = async (publish: boolean) => {
-    const res = await fetch("/api/poll", {
-      method: "PUT",
-      body: JSON.stringify({
-        id: id,
-        published: publish,
-      }),
-    });
-    if (!res.ok) {
-      console.error(await res.json());
-      return;
-    }
-    const { result } = await res.json();
-    const parsed = z.array(pollSelectSchema).parse(result);
-    if (parsed.length > 1) {
-      console.error("More that one poll.");
-      return;
-    }
-    setPoll((prev) => {
-      if (prev) return { ...prev, published: parsed[0].published };
-    });
   };
 
   return (

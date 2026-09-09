@@ -110,6 +110,7 @@ export const PollConfigDialog = (props: Props) => {
         </DialogHeader>
         <div className="flex flex-col gap-4">
           {/* TODO: expires_at */}
+          {/* TODO: manually close */}
           <div className="flex justify-between items-baseline">
             <Badge
               variant="outline"
