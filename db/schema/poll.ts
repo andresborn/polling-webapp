@@ -14,6 +14,7 @@ export const poll = pgTable("poll", {
   userId: text("user_id").references(() => user.id).notNull(),
   published: boolean("published").default(false).notNull(),
   authenticatedVoting: boolean("authenticated_voting").default(false).notNull(),
+  closed: boolean("closed").default(false).notNull(),
   expires_at: timestamp(),
   ...timestamps,
 });
