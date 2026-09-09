@@ -1,11 +1,11 @@
 import { HowToBox } from "@/components/how-to-box";
-import { LiveVotingIndicator } from "@/components/live-voting-indicator";
+import { VotingIndicator } from "@/components/live-voting-indicator";
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center pb-8">
       <main className="w-full py-8 px-18">
-        <LiveVotingIndicator />
+        <VotingIndicator live />
         <h1 className="font-heading text-6xl bold">Ask a question.</h1>
         <h1 className="font-heading text-6xl text-primary bold pb-6">
           See the results in real time.

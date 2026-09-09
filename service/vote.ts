@@ -3,6 +3,15 @@ import { vote } from "@/db/schema";
 import { voteInsertSchema } from "@/db/schema/vote";
 import z from "zod";
 
+export const hasUserVotedOnPoll = async (pollId: string, userId: string) => {
+  try {
+    return await db.query.vote.findFirst({ where: { pollId, userId } });
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
 export const createVote = async (
   insertData: {
     pollId: string;

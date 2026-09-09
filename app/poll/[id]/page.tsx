@@ -1,5 +1,10 @@
 import { ChartExample } from "@/components/bar-chart";
+import { ResultsBars } from "@/components/results-bars";
+import { VotingCard } from "@/components/voting-card";
+import { auth } from "@/lib/auth";
 import { getPoll } from "@/service/poll";
+import { hasUserVotedOnPoll } from "@/service/vote";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 export default async function Poll({
@@ -9,13 +14,22 @@ export default async function Poll({
 }) {
   const { id } = await params;
 
-  const result = await getPoll(id);
+  const session = await auth.api.getSession({ headers: await headers() });
+  let userId = "";
+  let voted = false;
+  let voteOptionId = "";
 
-  if (!result) notFound();
+  if (session) {
+    userId = session.user.id;
+    const vote = await hasUserVotedOnPoll(id, userId);
+    voted = !!vote;
+    voteOptionId = vote?.optionId ?? "";
+  }
 
   const poll = await getPoll(id);
 
   if (!poll) notFound();
+  if (!poll.published) notFound();
 
   const options = poll.options.map((o) => {
     return { id: o.id, label: o.label };
@@ -36,6 +50,17 @@ export default async function Poll({
   });
 
   return (
-    <ChartExample chartData={chartData} options={options} pollId={poll.id} />
+    <main className="px-18 pt-8 flex flex-col gap-8">
+      <h1 className="font-heading text-6xl">{poll.label}</h1>
+      {/* <ChartExample chartData={chartData} options={options} pollId={poll.id} /> */}
+      <div className="flex flex-col md:flex-row gap-8">
+        <ResultsBars chartData={chartData} />
+        <VotingCard
+          options={options}
+          pollId={poll.id}
+          user={{ userId, voted, voteOptionId }}
+        />
+      </div>
+    </main>
   );
 }
