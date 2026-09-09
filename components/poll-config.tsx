@@ -35,6 +35,9 @@ import {
 } from "lucide-react";
 import { pollSelectSchema } from "@/db/schema/poll";
 import { PollConfigDialog } from "./poll-config-dialog";
+import { PublishedBadge } from "./badges/published-badge";
+import { AuthBadge } from "./badges/auth-badge";
+import { ClosedBadge } from "./badges/closed-badge";
 
 interface UpdateSchema {
   id: string;
@@ -109,41 +112,9 @@ export default function PollConfig(props: Props) {
           <div className="flex justify-between pb-4">
             <h1 className="font-heading text-2xl">{poll.label}</h1>
             <div className="flex gap-4 items-center">
-              <Badge
-                variant="outline"
-                className="h-6 font-bold"
-                data-icon="inline-start"
-              >
-                {poll.authenticatedVoting ? (
-                  <>
-                    <FingerprintPattern className="stroke-primary" size={12} />
-                    Authenticated Voting
-                  </>
-                ) : (
-                  <>
-                    <HatGlasses className="stroke-muted-foreground" size={12} />
-                    Anonymous Voting
-                  </>
-                )}
-              </Badge>
-              <Badge
-                variant="outline"
-                className="h-6 font-bold"
-                data-icon="inline-start"
-              >
-                {poll.published ? (
-                  <>
-                    <CircleCheck className="stroke-success" size={12} />
-                    Published
-                  </>
-                ) : (
-                  <>
-                    <CircleX className="stroke-destructive" size={12} />
-                    Unpublished
-                  </>
-                )}
-              </Badge>
-
+              <AuthBadge authenticatedVoting={poll.authenticatedVoting} />
+              <PublishedBadge published={poll.published} />
+              <ClosedBadge closed={poll.closed} />
               <PollConfigDialog poll={poll} setPoll={setPoll} />
             </div>
           </div>

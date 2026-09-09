@@ -21,7 +21,12 @@ import {
   CircleX,
   HatGlasses,
   FingerprintPattern,
+  MonitorCheck,
+  MonitorX,
 } from "lucide-react";
+import { PublishedBadge } from "./badges/published-badge";
+import { AuthBadge } from "./badges/auth-badge";
+import { ClosedBadge } from "./badges/closed-badge";
 
 interface Props {
   poll: PollWithOptions;
@@ -110,25 +115,9 @@ export const PollConfigDialog = (props: Props) => {
         </DialogHeader>
         <div className="flex flex-col gap-4">
           {/* TODO: expires_at */}
-          {/* TODO: manually close */}
+
           <div className="flex justify-between items-baseline">
-            <Badge
-              variant="outline"
-              className="h-6 font-bold"
-              data-icon="inline-start"
-            >
-              {props.poll.published ? (
-                <>
-                  <CircleCheck className="stroke-success" size={12} />
-                  Published
-                </>
-              ) : (
-                <>
-                  <CircleX className="stroke-destructive" size={12} />
-                  Unpublished
-                </>
-              )}
-            </Badge>
+            <PublishedBadge published={props.poll.published} />
             <Button
               size="lg"
               variant="default"
@@ -139,23 +128,7 @@ export const PollConfigDialog = (props: Props) => {
             </Button>
           </div>
           <div className="flex justify-between items-baseline">
-            <Badge
-              variant="outline"
-              className="h-6 font-bold"
-              data-icon="inline-start"
-            >
-              {props.poll.authenticatedVoting ? (
-                <>
-                  <FingerprintPattern className="stroke-primary" size={12} />
-                  Authenticated Voting
-                </>
-              ) : (
-                <>
-                  <HatGlasses className="stroke-muted-foreground" size={12} />
-                  Anonymous Voting
-                </>
-              )}
-            </Badge>
+            <AuthBadge authenticatedVoting={props.poll.authenticatedVoting} />
             <Button
               size="lg"
               variant="default"
@@ -169,6 +142,20 @@ export const PollConfigDialog = (props: Props) => {
           </div>
 
           <p className="font-heading pt-12 text-lg">Danger Zone</p>
+          <div className="flex justify-between items-baseline">
+            <ClosedBadge closed={props.poll.closed} />
+            <Button
+              size="lg"
+              variant="default"
+              disabled={props.poll.closed}
+              className="font-bold right"
+              onClick={() => {}}
+            >
+              {!props.poll.closed
+                ? "Close (this action is permanent)"
+                : "Closed"}
+            </Button>
+          </div>
           <div className="flex justify-between items-baseline">
             <p>Delete poll</p>
             <Button
