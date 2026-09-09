@@ -54,11 +54,12 @@ export default async function Poll({
       <h1 className="font-heading text-6xl">{poll.label}</h1>
       {/* <ChartExample chartData={chartData} options={options} pollId={poll.id} /> */}
       <div className="flex flex-col md:flex-row gap-8">
-        <ResultsBars chartData={chartData} />
+        <ResultsBars chartData={chartData} pollClosed={poll.closed} />
         <VotingCard
           options={options}
           pollId={poll.id}
           user={{ userId, voted, voteOptionId }}
+          pollClosed={poll.closed}
         />
       </div>
     </main>

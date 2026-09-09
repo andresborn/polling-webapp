@@ -14,6 +14,7 @@ interface Props {
   options: VoteOption[];
   pollId: string;
   user: { userId: string | undefined; voted: boolean; voteOptionId: string };
+  pollClosed: boolean;
 }
 
 interface VoteState {
@@ -22,9 +23,11 @@ interface VoteState {
 }
 
 export const VotingCard = (props: Props) => {
-  const [hasVoted, setHasVoted] = useState(true);
+  const [hasVoted, setHasVoted] = useState(false);
 
   const submitVote = async (optionId: string) => {
+    if (props.pollClosed) return;
+
     const item = localStorage.getItem(props.pollId);
     const vs = item ? (JSON.parse(item) as VoteState) : null;
     console.log(vs);
@@ -58,6 +61,8 @@ export const VotingCard = (props: Props) => {
   };
 
   useEffect(() => {
+    if (props.pollClosed) return;
+
     // Create anonId only for non-users
     if (props.user.userId) {
       setHasVoted(props.user.voted);
@@ -86,8 +91,8 @@ export const VotingCard = (props: Props) => {
         {props.options.map((o) => (
           <Button
             className="justify-start w-full font-bold h-12"
-            variant={hasVoted ? "outline" : "default"}
-            disabled={!!hasVoted}
+            variant={hasVoted || props.pollClosed ? "outline" : "default"}
+            disabled={!!hasVoted || props.pollClosed}
             key={o.id}
             onClick={() => submitVote(o.id)}
           >
