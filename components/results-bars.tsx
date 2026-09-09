@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Separator } from "./ui/separator";
 import { cn } from "@/lib/utils";
@@ -28,7 +30,8 @@ export function ResultsBars(props: Props) {
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
         {props.chartData.map((d) => {
-          const pct = totalVotes === 0 ? 0 : Math.round((d.votes / totalVotes) * 100);
+          const pct =
+            totalVotes === 0 ? 0 : Math.round((d.votes / totalVotes) * 100);
           const isLeading = d.votes === maxVotes && maxVotes > 0;
 
           return (
@@ -43,7 +46,7 @@ export function ResultsBars(props: Props) {
                 <div
                   className={cn(
                     "h-full transition-[width] duration-500 ease-out",
-                    isLeading ? "bg-primary" : "bg-muted-foreground"
+                    isLeading ? "bg-primary" : "bg-muted-foreground",
                   )}
                   style={{ width: `${pct}%` }}
                 />
