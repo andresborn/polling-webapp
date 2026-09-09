@@ -1,5 +1,6 @@
 "use client";
 
+import { LiveVotingIndicator } from "./live-voting-indicator";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Separator } from "./ui/separator";
 import { cn } from "@/lib/utils";
@@ -23,10 +24,7 @@ export function ResultsBars(props: Props) {
     <Card className={cn("max-w-3xl w-full py-6 bg-card/35", props.className)}>
       <CardHeader className="flex flex-row items-center justify-between">
         <h1 className="font-heading text-2xl">Results</h1>
-        <div className="flex items-center gap-2 border border-destructive px-3 py-1.5 text-xs font-medium text-destructive uppercase tracking-wide">
-          <span className="size-2 rounded-full bg-destructive animate-blink" />
-          Live results
-        </div>
+        <LiveVotingIndicator />
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
         {props.chartData.map((d) => {
