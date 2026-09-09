@@ -86,6 +86,7 @@ export const updatePoll = async (
     published?: string;
     authenticatedVoting?: string;
     expires_at?: string;
+    closed?: boolean;
   },
   userId: string,
 ) => {
@@ -104,9 +105,17 @@ export const updatePoll = async (
   }
 
   if (parsed.data) {
-    const { id, authenticatedVoting, expires_at, label, published } =
+    const { id, authenticatedVoting, expires_at, label, published, closed } =
       parsed.data;
     const updated_at = new Date(Date.now());
+
+    if (closed !== undefined && closed === false) {
+      return {
+        success: false,
+        result: null,
+        error: new Error("Update poll: reopen poll not allowed."),
+      };
+    }
 
     if (!id) {
       return {
@@ -123,6 +132,7 @@ export const updatePoll = async (
         label,
         published,
         updated_at,
+        closed,
       }).where(eq(poll.id, id))
         .returning();
       return { success: true, result, error: null };

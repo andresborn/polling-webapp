@@ -11,41 +11,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 import { optionSelectSchema } from "@/db/schema/option";
 import { Poll, Option } from "@/db/types";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import z from "zod";
-import { Badge } from "./ui/badge";
-import {
-  CircleCheck,
-  CircleX,
-  FingerprintPattern,
-  HatGlasses,
-} from "lucide-react";
-import { pollSelectSchema } from "@/db/schema/poll";
+
 import { PollConfigDialog } from "./poll-config-dialog";
 import { PublishedBadge } from "./badges/published-badge";
 import { AuthBadge } from "./badges/auth-badge";
 import { ClosedBadge } from "./badges/closed-badge";
-
-interface UpdateSchema {
-  id: string;
-  label?: string;
-  published?: string;
-  authenticatedVoting?: string;
-  expires_at?: string;
-}
 
 export interface PollWithOptions extends Poll {
   options: Option[];
@@ -59,7 +35,6 @@ export default function PollConfig(props: Props) {
   const { id } = useParams();
   const [poll, setPoll] = useState<PollWithOptions | undefined>(props.poll);
   const [option, setOption] = useState("");
-  const router = useRouter();
 
   const addOption = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();

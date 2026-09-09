@@ -1,10 +1,8 @@
 "use client";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -15,15 +13,6 @@ import { PollWithOptions } from "./poll-config";
 import { useRouter } from "next/navigation";
 import z from "zod";
 import { pollSelectSchema } from "@/db/schema/poll";
-import { Badge } from "./ui/badge";
-import {
-  CircleCheck,
-  CircleX,
-  HatGlasses,
-  FingerprintPattern,
-  MonitorCheck,
-  MonitorX,
-} from "lucide-react";
 import { PublishedBadge } from "./badges/published-badge";
 import { AuthBadge } from "./badges/auth-badge";
 import { ClosedBadge } from "./badges/closed-badge";
@@ -92,6 +81,29 @@ export const PollConfigDialog = (props: Props) => {
     });
   };
 
+  const updateClosedStatus = async (closed: boolean) => {
+    const res = await fetch("/api/poll", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: props.poll.id,
+        closed,
+      }),
+    });
+    if (!res.ok) {
+      console.error(await res.json());
+      return;
+    }
+    const { result } = await res.json();
+    const parsed = z.array(pollSelectSchema).parse(result);
+    if (parsed.length > 1) {
+      console.error("More that one poll.");
+      return;
+    }
+    props.setPoll((prev) => {
+      if (prev) return { ...prev, closed: parsed[0].closed };
+    });
+  };
+
   return (
     <Dialog>
       <DialogTrigger
@@ -149,7 +161,7 @@ export const PollConfigDialog = (props: Props) => {
               variant="default"
               disabled={props.poll.closed}
               className="font-bold right"
-              onClick={() => {}}
+              onClick={() => updateClosedStatus(true)}
             >
               {!props.poll.closed
                 ? "Close (this action is permanent)"

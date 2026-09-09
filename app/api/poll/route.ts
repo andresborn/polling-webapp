@@ -55,7 +55,7 @@ export const PUT = withAuth(async (request, context) => {
 
   if (!success) {
     return NextResponse.json({
-      message: "Can't create poll.",
+      message: "Couldn't update poll.",
       error: JSON.stringify(
         error instanceof Error
           ? { name: error.name, message: error.message }
@@ -64,7 +64,7 @@ export const PUT = withAuth(async (request, context) => {
     }, { status: 400 });
   }
 
-  return NextResponse.json({ message: "Poll created.", result }, {
+  return NextResponse.json({ message: "Poll updated.", result }, {
     status: 201,
   });
 });
