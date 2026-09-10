@@ -17,32 +17,30 @@ export const GET = withAuth(async (request, context) => {
     return NextResponse.json({ result });
   }
 
-  const { success, error, result } = await getUserPolls({ userId });
+  const res = await getUserPolls({ userId });
 
-  if (!success) {
+  if (!res.ok) {
     return NextResponse.json({
-      message: "Couldn't query user polls.",
-      error: JSON.stringify(error),
-    }, { status: 400 });
+      error: res.error,
+    }, { status: res.error.status });
   }
 
-  return NextResponse.json({ result });
+  return NextResponse.json({ result: res.data });
 });
 
 export const POST = withAuth(async (request, context) => {
   const data = await request.json();
 
   const userId = context.user.id;
-  const { result, success, error } = await createPoll({ ...data, userId });
+  const res = await createPoll({ ...data, userId });
 
-  if (!success) {
+  if (!res.ok) {
     return NextResponse.json({
-      message: "Can't create poll.",
-      error: JSON.stringify(error),
-    }, { status: 400 });
+      error: res.error,
+    }, { status: res.error.status });
   }
 
-  return NextResponse.json({ message: "Poll created.", result }, {
+  return NextResponse.json({ result: res.data }, {
     status: 201,
   });
 });
@@ -51,20 +49,15 @@ export const PUT = withAuth(async (request, context) => {
   const data = await request.json();
 
   const userId = context.user.id;
-  const { result, success, error } = await updatePoll(data, userId);
+  const res = await updatePoll(data, userId);
 
-  if (!success) {
+  if (!res.ok) {
     return NextResponse.json({
-      message: "Couldn't update poll.",
-      error: JSON.stringify(
-        error instanceof Error
-          ? { name: error.name, message: error.message }
-          : {},
-      ),
-    }, { status: 400 });
+      error: res.error,
+    }, { status: res.error.status });
   }
 
-  return NextResponse.json({ message: "Poll updated.", result }, {
+  return NextResponse.json({ result: res.data }, {
     status: 201,
   });
 });
@@ -72,14 +65,13 @@ export const PUT = withAuth(async (request, context) => {
 export const DELETE = withAuth(async (request, context) => {
   const userId = context.user.id;
   const { pollId } = await request.json();
-  const { success, error, result } = await deleteUserPoll(pollId, userId);
+  const res = await deleteUserPoll(pollId, userId);
 
-  if (!success) {
+  if (!res.ok) {
     return NextResponse.json({
-      message: "Couldn't delete the poll.",
-      error: JSON.stringify(error),
-    }, { status: 400 });
+      error: res.error,
+    }, { status: res.error.status });
   }
 
-  return NextResponse.json({ result });
+  return NextResponse.json({ result: res.data });
 });

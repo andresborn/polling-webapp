@@ -6,19 +6,18 @@ export const POST = withAuth(async (request, context) => {
   const data = await request.json();
 
   const userId = context.user.id;
-  const { result, success, error } = await createOption({
+  const res = await createOption({
     ...data,
     userId,
   });
 
-  if (!success) {
-    return NextResponse.json({
-      message: "Can't create option.",
-      error: JSON.stringify(error),
-    }, { status: 400 });
+  if (!res.ok) {
+    return NextResponse.json({ error: res.error }, {
+      status: res.error.status,
+    });
   }
 
-  return NextResponse.json({ message: "Option created.", result }, {
+  return NextResponse.json({ result: res.data }, {
     status: 201,
   });
 });
@@ -26,14 +25,13 @@ export const POST = withAuth(async (request, context) => {
 export const DELETE = withAuth(async (request, context) => {
   const userId = context.user.id;
   const { optionId } = await request.json();
-  const { success, error, result } = await deleteUserOption(optionId, userId);
+  const res = await deleteUserOption(optionId, userId);
 
-  if (!success) {
-    return NextResponse.json({
-      message: "Couldn't delete the option.",
-      error: JSON.stringify(error),
-    }, { status: 400 });
+  if (!res.ok) {
+    return NextResponse.json({ error: res.error }, {
+      status: res.error.status,
+    });
   }
 
-  return NextResponse.json({ result });
+  return NextResponse.json({ result: res.data });
 });

@@ -16,3 +16,11 @@ export type Verification = typeof verification.$inferSelect;
 export type Poll = typeof poll.$inferSelect;
 export type Option = typeof option.$inferSelect;
 export type Vote = typeof vote.$inferSelect;
+
+export type PollWithOptions = Poll & {
+  options: Option[];
+};
+
+export type PollWithOptionsAndVotes = PollWithOptions & {
+  votes: Vote[];
+};

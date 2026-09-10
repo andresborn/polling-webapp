@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Dispatch, SetStateAction } from "react";
-import { PollWithOptions } from "./poll-config";
+import { PollWithOptions } from "@/db/types";
 import { useRouter } from "next/navigation";
 import z from "zod";
 import { pollSelectSchema } from "@/db/schema/poll";

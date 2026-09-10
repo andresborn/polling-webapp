@@ -22,10 +22,7 @@ import { PollConfigDialog } from "./poll-config-dialog";
 import { PublishedBadge } from "./badges/published-badge";
 import { AuthBadge } from "./badges/auth-badge";
 import { ClosedBadge } from "./badges/closed-badge";
-
-export interface PollWithOptions extends Poll {
-  options: Option[];
-}
+import { PollWithOptions } from "@/db/types";
 
 interface Props {
   poll: PollWithOptions | undefined;

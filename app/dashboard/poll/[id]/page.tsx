@@ -15,7 +15,11 @@ export default async function EditPoll({
 
   const { id } = await params;
 
-  const poll = await getUserPollWithOptions(session.user.id, id);
+  const res = await getUserPollWithOptions(session.user.id, id);
+  if (!res.ok) {
+    // handle error
+    return null;
+  }
 
   return (
     <div className="flex flex-col items-center">
@@ -32,7 +36,7 @@ export default async function EditPoll({
             Live link &#8599;
           </Link>
         </div>
-        <PollConfig poll={poll} />
+        <PollConfig poll={res.data} />
       </main>
     </div>
   );
