@@ -40,3 +40,6 @@
 - [ ] Delete options when deleting poll. Delete votes before deleting options. Move delete option to poll page. Show warning and 
     confirmation.
 - [ ] Unpublished polls visible to owner, redirect for rest.
+
+- [x] Fix vote allowed on closed poll.
+- [x] Add anonymous/authenticated indicator to poll.

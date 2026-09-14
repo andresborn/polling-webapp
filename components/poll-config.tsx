@@ -40,7 +40,10 @@ export default function PollConfig(props: Props) {
       method: "POST",
       body: JSON.stringify({ pollId: id, label: option }),
     });
-    if (!res.ok) return;
+    if (!res.ok) {
+      console.error(await res.json());
+      return;
+    }
     const body = await res.json();
     const parsed = z.array(optionSelectSchema).safeParse(body.result);
 

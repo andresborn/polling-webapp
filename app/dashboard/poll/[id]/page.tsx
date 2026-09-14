@@ -18,7 +18,7 @@ export default async function EditPoll({
   const res = await getUserPollWithOptions(session.user.id, id);
   if (!res.ok) {
     // handle error
-    return null;
+    return <div>Something went wrong: {res.error.message}</div>;
   }
 
   return (

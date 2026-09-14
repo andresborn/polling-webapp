@@ -8,12 +8,15 @@ export default async function Home() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/sign-in");
 
-  const initialPolls = await getUserPolls({ userId: session.user.id });
+  const res = await getUserPolls({ userId: session.user.id });
+  if (!res.ok) {
+    return <div>Something went wrong: {res.error.message}</div>;
+  }
 
   return (
     <div className="flex flex-col items-center">
       <main className="w-full py-8 px-[10%] gap-4 flex flex-col">
-        <PollsTable initialPolls={initialPolls.result ?? []} />
+        <PollsTable initialPolls={res.data ?? []} />
       </main>
     </div>
   );

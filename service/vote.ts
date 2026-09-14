@@ -5,13 +5,14 @@ import { Vote } from "@/db/types";
 import { AppError, err, ok, Result } from "@/lib/result";
 import z from "zod";
 
-export const hasUserVotedOnPoll = async (
+export const getUserVote = async (
   pollId: string,
   userId: string,
-): Promise<Result<boolean>> => {
+): Promise<Result<Vote | null>> => {
   try {
     const res = await db.query.vote.findFirst({ where: { pollId, userId } });
-    return ok(!!res);
+    if (res) return ok(res);
+    return ok(null);
   } catch (e) {
     console.error(e);
     return err(
@@ -52,6 +53,10 @@ export const createVote = async (
 
     if (!poll.published) {
       return err(AppError.forbidden("Poll not published."));
+    }
+
+    if (poll.closed) {
+      return err(AppError.forbidden("Poll is closed."));
     }
 
     if (
