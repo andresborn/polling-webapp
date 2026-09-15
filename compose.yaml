@@ -3,6 +3,7 @@ services:
   next_webapp:
     build:
       context: .
+    image: ghcr.io/andresborn/polling-webapp:${IMAGE_TAG:-latest}
     container_name: next_webapp
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
