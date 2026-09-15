@@ -35,14 +35,10 @@ jobs:
               uses: docker/metadata-action@v6
               with:
                 images: ghcr.io/andresborn/polling-webapp
-            - name: Build and push via Docker Compose
+            - name: Build and push Docker images
+              uses: docker/bake-action@v7
               env:
                 IMAGE_TAG: ${{ steps.meta.outputs.version }}
-              run: |
-                docker compose build
-                docker compose push
-            - name: Build and push Docker image
-              uses: docker/bake-action@v7
               with:
                 push: true
                 set: |
