@@ -1,0 +1,11 @@
+# Build image containers
+
+# (Todo: Test)
+
+# Upload to container registry
+
+# SSH to droplet
+
+# Pull containers from registry
+
+# Start containers
