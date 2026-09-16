@@ -1,4 +1,3 @@
-import { ChartExample } from "@/components/bar-chart";
 import { ResultsBars } from "@/components/results-bars";
 import { VotingCard } from "@/components/voting-card";
 import { auth } from "@/lib/auth";
