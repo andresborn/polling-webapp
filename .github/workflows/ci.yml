@@ -1,4 +1,4 @@
-name: Docker Publish
+name: Docker deploy to droplet
 
 on:
     push:
@@ -16,6 +16,7 @@ permissions:
     packages: write
 
 jobs:
+  # Build and push image containers
     build-and-push:
         runs-on: ubuntu-latest
         steps:
@@ -43,14 +44,18 @@ jobs:
                 push: true
                 set: |
                   *.tags=user/app:latest
-  
-# Build image containers
-
-# (Todo: Test)
-
-# Upload to container registry
-
-# SSH to droplet
+  # (Todo: Test)
+  # SSH to droplet
+    SSH-and-pull:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Execute remote SSH commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_KEY }}
+          script: whoami
 
 # Pull containers from registry
 
