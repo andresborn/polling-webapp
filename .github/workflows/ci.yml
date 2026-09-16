@@ -55,7 +55,8 @@ jobs:
           host: ${{ secrets.DROPLET_HOST }}
           username: ${{ secrets.DROPLET_USER }}
           key: ${{ secrets.DROPLET_KEY }}
-          script: whoami
+          script: |
+            touch test.txt
 
 # Pull containers from registry
 
