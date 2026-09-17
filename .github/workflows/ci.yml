@@ -42,11 +42,10 @@ jobs:
                 IMAGE_TAG: ${{ steps.meta.outputs.version }}
               with:
                 push: true
-                set: |
-                  *.tags=user/app:latest
   # (Todo: Test)
   # SSH to droplet
     SSH-and-pull:
+      needs: build-and-push
       runs-on: ubuntu-latest
       steps:
       - name: Execute remote SSH commands using password
@@ -56,7 +55,11 @@ jobs:
           username: ${{ secrets.DROPLET_USER }}
           key: ${{ secrets.DROPLET_KEY }}
           script: |
-            touch test.txt
+            cd polling-webapp
+            sudo docker compose pull
+            sudo docker compose up -d db
+            sudo docker compose run --rm migrate
+            sudo docker compose up -d
 
 # Pull containers from registry
 
