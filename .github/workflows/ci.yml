@@ -42,6 +42,7 @@ jobs:
                 IMAGE_TAG: ${{ steps.meta.outputs.version }}
               with:
                 push: true
+                tags: ${{ steps.meta.outputs.tags }}
   # (Todo: Test)
   # SSH to droplet
     SSH-and-pull:
