@@ -42,7 +42,8 @@ jobs:
                 IMAGE_TAG: ${{ steps.meta.outputs.version }}
               with:
                 push: true
-                tags: ${{ steps.meta.outputs.tags }}
+                set: |
+                  *.tags=${{ github.actor }}/${ github.event.repository.name }:${{ steps.meta.outputs.version }}
   # (Todo: Test)
   # SSH to droplet
     SSH-and-pull:
