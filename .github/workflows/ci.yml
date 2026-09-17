@@ -43,7 +43,7 @@ jobs:
               with:
                 push: true
                 set: |
-                  *.tags=${{ github.actor }}/${ github.event.repository.name }:${{ steps.meta.outputs.version }}
+                  *.tags=${{ github.actor }}/${{ github.event.repository.name }}:${{ steps.meta.outputs.version }}
   # (Todo: Test)
   # SSH to droplet
     SSH-and-pull:
