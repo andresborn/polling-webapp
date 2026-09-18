@@ -7,6 +7,8 @@ services:
     container_name: next_webapp
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - BETTER_AUTH_SECRET=temporary_secret
+      - BETTER_AUTH_URL=temporary_secret
     ports:
       - 3000:3000
     networks:
