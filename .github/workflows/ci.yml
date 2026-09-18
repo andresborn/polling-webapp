@@ -57,6 +57,7 @@ jobs:
           key: ${{ secrets.DROPLET_KEY }}
           script: |
             cd polling-webapp
+            git pull
             sudo docker compose pull
             sudo docker compose up -d db
             sudo docker compose run --rm migrate
