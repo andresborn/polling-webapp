@@ -51,7 +51,10 @@ jobs:
       steps:
       - name: Execute remote SSH commands using password
         uses: appleboy/ssh-action@v1
+        env:
+          IMAGE_TAG: ${{ needs.build-and-push.outputs.image_tag }}
         with:
+          envs: IMAGE_TAG
           host: ${{ secrets.DROPLET_HOST }}
           username: ${{ secrets.DROPLET_USER }}
           key: ${{ secrets.DROPLET_KEY }}
