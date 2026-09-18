@@ -67,8 +67,8 @@ jobs:
             sudo -E docker compose pull next_webapp db 
             sudo -E docker compose --profile tools pull migrate
             sudo -E docker compose up -d db
-            sudo -E docker compose run --rm --no-build migrate
-            sudo -E docker compose up -d --no-build
+            sudo -E docker compose run --rm migrate
+            sudo -E docker compose up -d
 
 # Pull containers from registry
 
