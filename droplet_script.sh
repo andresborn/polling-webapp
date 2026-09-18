@@ -25,3 +25,4 @@ exec zsh
 
 # Log in as your user (deployman) and create polling-webapp directory
 mkdir polling-webapp
+git clone https://github.com/andresborn/polling-webapp.git
