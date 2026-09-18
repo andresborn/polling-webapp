@@ -41,9 +41,8 @@ jobs:
               env:
                 IMAGE_TAG: ${{ steps.meta.outputs.version }}
               with:
+                targets: next_webapp
                 push: true
-                set: |
-                  *.tags=${{ github.actor }}/${{ github.event.repository.name }}:${{ steps.meta.outputs.version }}
   # (Todo: Test)
   # SSH to droplet
     SSH-and-pull:
