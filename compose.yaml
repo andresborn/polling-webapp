@@ -9,8 +9,9 @@ services:
       - ./conf:/etc/caddy
       - caddy_data:/data
       - caddy_config:/config
-    depends_on:
-      next_webapp:
+    networks:
+      - app-network
+    profiles: ["tools"]
 
   # Polling web app
   next_webapp:
