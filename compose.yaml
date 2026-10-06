@@ -3,7 +3,7 @@ services:
   next_webapp:
     build:
       context: .
-    image: ghcr.io/andresborn/polling-webapp:${IMAGE_TAG:-latest}
+    image: ghcr.io/andresborn/polling-webapp:${IMAGE_TAG:-main}
     container_name: next_webapp
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
@@ -45,7 +45,7 @@ services:
       context: .
       target: builder
     command: npx drizzle-kit migrate
-    image: ghcr.io/andresborn/polling-webapp-migrate:${IMAGE_TAG:-latest}
+    image: ghcr.io/andresborn/polling-webapp-migrate:${IMAGE_TAG:-main}
     profiles: ["tools"] # excluded from plain `up -d`; `run migrate` still works
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
