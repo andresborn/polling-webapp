@@ -1,18 +1,4 @@
 services:
-  # Web server
-  caddy:
-    image: caddy:latest
-    restart: unless-stopped
-    ports:
-      - 443:next_webapp:3000
-    volumes:
-      - ./conf:/etc/caddy
-      - caddy_data:/data
-      - caddy_config:/config
-    networks:
-      - app-network
-    profiles: ["tools"]
-
   # Polling web app
   next_webapp:
     build:
