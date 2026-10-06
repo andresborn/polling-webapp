@@ -4,7 +4,7 @@ services:
     image: caddy:latest
     restart: unless-stopped
     ports:
-      - 4443:next_webapp:3000
+      - 443:next_webapp:3000
     volumes:
       - ./conf:/etc/caddy
       - caddy_data:/data
