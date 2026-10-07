@@ -59,9 +59,11 @@ services:
   caddy:
     image: caddy:latest
     restart: unless-stopped
-    profiles: ["tools"]
     ports:
-      - 8443:next-webapp:3000
+      - "80:80"
+      - "443:443"
+    networks:
+      - app-network
     volumes:
       - ./conf:/etc/caddy
       - caddy_data:/data
