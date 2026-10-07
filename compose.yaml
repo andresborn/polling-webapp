@@ -1,6 +1,7 @@
 services:
   # Polling web app
   next_webapp:
+    restart: unless-stopped
     build:
       context: .
     image: ghcr.io/andresborn/polling-webapp:${IMAGE_TAG:-main}
@@ -10,7 +11,7 @@ services:
       - BETTER_AUTH_SECRET=temporary_secret
       - BETTER_AUTH_URL=temporary_secret
     ports:
-      - 3000:3000
+      - 127.0.0.1:3000:3000
     networks:
       - app-network
     depends_on:
@@ -28,10 +29,6 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-    ports:
-      - 5432:5432
-    expose:
-      - 5432
     healthcheck:
       test: ["CMD", "pg_isready"]
       interval: 10s
