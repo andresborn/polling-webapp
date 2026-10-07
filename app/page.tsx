@@ -6,15 +6,27 @@ export default function Home() {
     <div className="flex flex-col items-center pb-8">
       <main className="w-full py-8 px-18">
         <VotingIndicator live />
-        <h1 className="font-heading text-6xl bold">Ask a question.</h1>
+        <h1 className="font-heading text-6xl bold mt-8">Ask a question.</h1>
         <h1 className="font-heading text-6xl text-primary bold pb-6">
           See the results in real time.
         </h1>
         <p className="font-sans text-muted-foreground">
           Pollit is a website where you can create polls, share them and see the
-          results live. It's free and made by me. It runs on a cheap machine and
-          comes with no guarantees. It's open source and it has an MIT License,
-          so you can use it as you please.
+          results live. It's free and made by{" "}
+          <a
+            className="hover:underline text-primary"
+            href="https://andrestec.com"
+          >
+            me.
+          </a>{" "}
+          It runs on a cheap machine and comes with no guarantees. The source
+          code is available{" "}
+          <a
+            className="hover:underline text-primary"
+            href="https://github.com/andresborn/polling-webapp/"
+          >
+            here.
+          </a>
         </p>
       </main>
       <div className="border-t border-primary/35"></div>
