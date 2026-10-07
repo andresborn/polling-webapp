@@ -55,6 +55,17 @@ services:
       db:
         condition: service_healthy
 
+  # Web server
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    ports:
+      - 8443:next-webapp:3000
+    volumes:
+      - ./conf:/etc/caddy
+      - caddy_data:/data
+      - caddy_config:/config
+
 volumes:
   db-data:
   caddy_data:
