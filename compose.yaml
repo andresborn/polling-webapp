@@ -59,6 +59,7 @@ services:
   caddy:
     image: caddy:latest
     restart: unless-stopped
+    profiles: ["tools"]
     ports:
       - 8443:next-webapp:3000
     volumes:
