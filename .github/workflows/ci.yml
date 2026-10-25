@@ -57,18 +57,18 @@ jobs:
           IMAGE_TAG: ${{ needs.build-and-push.outputs.image_tag }}
         with:
           envs: IMAGE_TAG
+          script_stop: true
           host: ${{ secrets.DROPLET_HOST }}
           username: ${{ secrets.DROPLET_USER }}
           key: ${{ secrets.DROPLET_KEY }}
           script: |
-            set -e
             cd polling-webapp
-            git pull
-            sudo -E docker compose pull next_webapp db 
-            sudo -E docker compose --profile tools pull migrate
-            sudo -E docker compose up -d db
-            sudo -E docker compose run --rm migrate
-            sudo -E docker compose up -d
+            git pull --ff-only
+            docker compose pull next_webapp db
+            docker compose --profile tools pull migrate
+            docker compose up -d db
+            docker compose run --rm migrate
+            docker compose up -d
 
 # Pull containers from registry
 

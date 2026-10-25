@@ -18,6 +18,9 @@ sudo ufw enable
 
 # Install docker in the droplet following these instructions: https://docs.docker.com/engine/install/ubuntu/
 
+# Allow the deploy user to run docker without sudo (reconnect SSH afterwards to pick up the group)
+sudo usermod -aG docker deployman
+
 # Recommended: Use zsh.
 sudo apt install zsh
 chsh -s $(which zsh)
