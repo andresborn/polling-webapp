@@ -45,19 +45,11 @@ export default async function Poll({
   const options = poll.data.options.map((o) => {
     return { id: o.id, label: o.label };
   });
-
-  // Initialize map
-  const cd: { [key: string]: { votes: number; label: string } } = {};
-  options.forEach((o) => {
-    cd[o.id] = { votes: 0, label: o.label };
-  });
-  // Count votes
-  for (const vote of poll.data.votes) {
-    cd[vote.optionId].votes += 1;
-  }
-
-  const chartData = Object.entries(cd).map(([k, v]) => {
-    return { optionId: k, votes: v.votes, optionLabel: v.label };
+  const chartData = poll.data.options.map((o) => {
+    const count = poll.data.optionsCount.filter(
+      (o) => o.optionId === o.optionId,
+    )[0];
+    return { optionId: o.id, optionLabel: o.label, votes: count?.count || 0 };
   });
 
   return (

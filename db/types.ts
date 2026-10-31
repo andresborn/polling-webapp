@@ -21,6 +21,7 @@ export type PollWithOptions = Poll & {
   options: Option[];
 };
 
-export type PollWithOptionsAndVotes = PollWithOptions & {
-  votes: Vote[];
+export type PollWithOptionsAndCount = PollWithOptions & {
+  optionsCount: { optionId: string; count: number }[];
+  totalCount: number;
 };

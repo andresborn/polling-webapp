@@ -1,9 +1,9 @@
 import { db } from "@/db/drizzle";
-import { poll } from "@/db/schema";
+import { option, poll, vote } from "@/db/schema";
 import { pollInsertSchema, pollUpdateSchema } from "@/db/schema/poll";
-import { Poll, PollWithOptions, PollWithOptionsAndVotes } from "@/db/types";
+import { Poll, PollWithOptions, PollWithOptionsAndCount } from "@/db/types";
 import { AppError, err, ok, Result } from "@/lib/result";
-import { eq } from "drizzle-orm";
+import { count, eq, inArray } from "drizzle-orm";
 import z from "zod";
 
 export const getUserPollWithOptions = async (
@@ -57,18 +57,39 @@ export const getUserPolls = async (
 
 export const getPoll = async (
   pollId: string,
-): Promise<Result<PollWithOptionsAndVotes>> => {
+): Promise<Result<PollWithOptionsAndCount>> => {
   try {
-    const result = await db.query.poll.findFirst({
+    const poll = await db.query.poll.findFirst({
       where: { id: pollId },
       with: {
         options: true,
-        votes: true,
+      },
+      extras: {
+        totalCount: (t) => db.$count(vote, eq(vote.pollId, t.id)),
       },
     });
-    if (!result) {
+
+    if (!poll) {
       return err(AppError.notFound("Poll not found."));
     }
+
+    const optionsCount = await db.select({
+      count: count(),
+      optionId: vote.optionId,
+    }).from(vote).where(
+      inArray(
+        vote.optionId,
+        db.select({ optionId: option.id }).from(option).where(
+          eq(option.pollId, pollId),
+        ),
+      ),
+    ).groupBy(vote.optionId);
+
+    const result = {
+      ...poll,
+      optionsCount,
+    };
+
     return ok(result);
   } catch (e) {
     console.log(e);
