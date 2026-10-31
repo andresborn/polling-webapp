@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import { nanoid } from "nanoid";
 import { SkeletonCard } from "./skeleton-voting-card";
-import { PollWithOptionsAndVotes } from "@/db/types";
+import { PollWithOptionsAndCount } from "@/db/types";
 import { AuthBadge } from "./badges/auth-badge";
 
 interface VoteOption {
@@ -18,7 +18,7 @@ interface Props {
   pollId: string;
   user: { userId: string | undefined; voted: boolean; voteOptionId: string };
   pollClosed: boolean;
-  poll: PollWithOptionsAndVotes;
+  poll: PollWithOptionsAndCount;
 }
 
 interface VoteState {
